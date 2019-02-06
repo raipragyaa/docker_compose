@@ -1,0 +1,23 @@
+version: '3'
+services:
+  myapp:
+    build: .
+    ports:
+      - "9800:8080"
+    environment: 
+      - DATABASE_URL=postgres://postgres@mydb:5432/postgres
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - mydb
+  mydb:
+    image: postgres:9.6.1
+    volumes:
+      - psql-db:/var/lib/psql/data
+
+volumes:
+  psql-db : 
+      driver_opts: 
+        type: none 
+        device: /Users/pragyar/classroom/dockerSession/composeAsgnmnt
+        o: bind 
