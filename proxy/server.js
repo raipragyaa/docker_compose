@@ -8,20 +8,31 @@ let services = [process.env.SERVICE1, process.env.SERVICE2];
 app.use(express.urlencoded({extended: true}));
 
 app.get('/', (req,res) => {
-    console.log("======================= ", services[0]);
     request.get(`http://${services[0]}:8080${req.url}`, (err,response, body) => {
-        console.log(body);
-        res.send(body) });
+        res.send(body);
+    });
+    services = services.reverse();
 });
 
-app.get('/getNumbers', (req,res) => {
+app.get('/getNumber', (req,res) => {
     request.get(`http://${services[0]}:8080${req.url}`, (err, response, body) => {
-        res.send(body);
-    })
+        res.json(body);
+    });
+    services = services.reverse();
 });
 
 app.post('/postNumber', (req, res) => {
-    request.post(`http://${services[0]}:8080${req.url}`)
+    request.post({
+        headers: {'content-type' : 'application/x-www-form-urlencoded'},
+        url:     `http://${services[0]}:8080${req.url}`,
+        body:    `number=${req.body.number}`
+    }, function(error, response, body){
+        if(error){
+            console.log(error);
+        };
+        res.end();
+      });
+      services = services.reverse();
 });
 
-app.listen(PORT, () => console.log("Forwarding to another port"));
+app.listen(PORT, () => console.log(`Listening on port ${PORT}`));      

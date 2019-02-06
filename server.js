@@ -10,11 +10,12 @@ const app = express();
 app.use(express.urlencoded({extended: true}));
 
 app.get('/', (req, res) => {
+  res.status(200);
   res.send(`<form method="post" action="/postNumber">  Number:<input type='number' name='number'/>` +
       `<input type='submit'/></form>`)
 });
 
-app.get('/getNumbers', (req, res) => {
+app.get('/getNumber', (req, res) => {
  client.query('SELECT * FROM numbers', null, (err, result) => {
     if(err){
       console.log(err.message);
@@ -34,12 +35,12 @@ app.post('/postNumber', (req, res) => {
     if(err){
       console.log(err.message);
       res.status(500);
-      res.end();
     }
     else {
-      res.redirect('/getNumbers');
-      res.end();
-    }});
+      res.status(200);
+    }
+    res.end();
+  });
 });
 
 
