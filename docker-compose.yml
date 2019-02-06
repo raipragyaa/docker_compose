@@ -1,19 +1,48 @@
 version: '3'
 services:
+  proxy:
+    build: ./proxy
+    ports:
+      - "9080:9000"
+    environment:
+      - SERVICE1=myapp 
+      - SERVICE2=myapp2 
+    volumes:
+      - ./proxy:/usr/src/proxy
+
   myapp:
     build: .
-    ports:
-      - "9800:8080"
     environment: 
       - DATABASE_URL=postgres://postgres@mydb:5432/postgres
     volumes:
       - .:/usr/src/app
     depends_on:
       - mydb
-  mydb:
-    image: postgres:9.6.1
+  
+  myapp2:
+    build: .
+    environment: 
+      - DATABASE_URL=postgres://postgres@mydb:5432/postgres
     volumes:
-      - psql-db:/var/lib/psql/data
+      - .:/usr/src/app
+    depends_on:
+      - mydb
+  
+  # myapp3:
+  #   build: .
+  #   ports:
+  #     - "9800:8080"
+  #   environment: 
+  #     - DATABASE_URL=postgres://postgres@mydb:5432/postgres
+  #   volumes:
+  #     - .:/usr/src/app
+  #   depends_on:
+  #     - mydb
+  
+  mydb:
+    image: postgres:alpine
+    volumes:
+      - psql-db:/var/lib/psql/data  
 
 volumes:
   psql-db : 
