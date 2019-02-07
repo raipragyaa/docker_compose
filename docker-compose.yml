@@ -5,8 +5,7 @@ services:
     ports:
       - "9080:9000"
     environment:
-      - SERVICE1=myapp 
-      - SERVICE2=myapp2 
+      - SERVICES=http://myapp:8080,http://myapp:8080  
     volumes:
       - ./proxy:/usr/src/proxy
 
@@ -27,17 +26,6 @@ services:
       - .:/usr/src/app
     depends_on:
       - mydb
-  
-  # myapp3:
-  #   build: .
-  #   ports:
-  #     - "9800:8080"
-  #   environment: 
-  #     - DATABASE_URL=postgres://postgres@mydb:5432/postgres
-  #   volumes:
-  #     - .:/usr/src/app
-  #   depends_on:
-  #     - mydb
   
   mydb:
     image: postgres:alpine
