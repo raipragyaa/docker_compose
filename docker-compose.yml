@@ -5,7 +5,7 @@ services:
     ports:
       - "9080:9000"
     environment:
-      - SERVICES=http://myapp:8080,http://myapp:8080  
+      - SERVICES=http://myapp:8080,http://myapp2:8080  
     volumes:
       - ./proxy:/usr/src/proxy
 
@@ -13,6 +13,7 @@ services:
     build: .
     environment: 
       - DATABASE_URL=postgres://postgres@mydb:5432/postgres
+      - SERVICE_MESSAGE="<====== Your first service is up :) =======>"
     volumes:
       - .:/usr/src/app
     depends_on:
@@ -22,6 +23,7 @@ services:
     build: .
     environment: 
       - DATABASE_URL=postgres://postgres@mydb:5432/postgres
+      - SERVICE_MESSAGE="<====== Your second service is up :) =======>"
     volumes:
       - .:/usr/src/app
     depends_on:
